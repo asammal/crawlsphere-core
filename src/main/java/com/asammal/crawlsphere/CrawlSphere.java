@@ -2,6 +2,8 @@ package com.asammal.crawlsphere;
 
 import com.asammal.crawlsphere.model.PageData;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,21 +13,38 @@ public class CrawlSphere {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter topic to crawl:");
-        String topic = scanner.nextLine().trim();
+        String topic = scanner.nextLine().trim().toLowerCase();
 
-        if (topic.isEmpty()) {
-            System.out.println("Topic cannot be empty.");
-            return;
+        /*System.out.println("Enter starting URLs (comma-separated):");
+        String urlInput = scanner.nextLine().trim();
+        scanner.close();
+
+        String[] rawUrls = urlInput.split(",");
+        List<String> startUrls = new ArrayList<>();
+        for (String url : rawUrls) {
+            url = url.trim();
+            if (!url.isEmpty()) {
+                startUrls.add(url);
+            }
         }
 
-        final String searchEngine = "duckduckgo"; // google
-        String seedUrl = "https://www." + searchEngine + ".com/html?q=" + topic.replace(" ", "+");
-        System.out.println("Starting crawl from: " + seedUrl);
+        if (startUrls.isEmpty()) {
+            System.out.println("No valid starting URLs provided. Exiting.");
+            return;
+        }*/
 
-        Crawler crawler = new Crawler(3); // Depth limit = 3
-        List<PageData> results = crawler.crawl(seedUrl, 1, topic);
+        List<String> startUrls = Arrays.asList(
+                "https://en.wikipedia.org/wiki",
+                "https://www.ibm.com/topics/",
+                "https://www.quantamagazine.org/tag/"
+        );
 
-        JsonWriter.writeToJson("output/crawlsphere_output.json", results);
-        System.out.println("Crawl finished. Results saved to output/crawlsphere_output.json");
+        Crawler crawler = new Crawler(topic);
+        for (String url : startUrls) {
+            crawler.crawl(url, 1);
+        }
+
+        crawler.writeResults();
+        System.out.println("Crawling complete. Check output JSON.");
     }
 }
