@@ -18,7 +18,8 @@ public class CrawlSphere {
             return;
         }
 
-        String seedUrl = "https://www.google.com/search?q=" + topic.replace(" ", "+");
+        final String searchEngine = "duckduckgo"; // google
+        String seedUrl = "https://www." + searchEngine + ".com/html?q=" + topic.replace(" ", "+");
         System.out.println("Starting crawl from: " + seedUrl);
 
         Crawler crawler = new Crawler(3); // Depth limit = 3
