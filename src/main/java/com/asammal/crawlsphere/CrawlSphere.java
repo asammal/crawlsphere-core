@@ -1,10 +1,10 @@
 package com.asammal.crawlsphere;
 
-import com.asammal.crawlsphere.model.PageData;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,7 +16,7 @@ public class CrawlSphere {
         System.out.println("Enter topic to crawl:");
         String topic = scanner.nextLine().trim().toLowerCase();
 
-        System.out.println("Let's look for " + topic);
+        long startTime = System.currentTimeMillis();
 
         List<String> startUrls = new ArrayList<>();
         InputStream inputStream = CrawlSphere.class.getClassLoader()
@@ -27,7 +27,6 @@ public class CrawlSphere {
             return;
         }
 
-        // Read seed URLs from seed.txt
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -51,5 +50,7 @@ public class CrawlSphere {
 
         crawler.writeResults();
         System.out.println("Crawling complete. Check output JSON.");
+
+        System.out.println("total time taken : " + (System.currentTimeMillis() - startTime)/1000 + " ms.");
     }
 }
